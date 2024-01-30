@@ -29,8 +29,8 @@ predictor = dlib.shape_predictor(args["shape_predictor"])
 cap = cv2.VideoCapture(0)
 
 # Read logo and resize 
-logo = cv2.imread('elonmusk.png') 
-# logo = cv2.imread('elonmusk.jpg') 
+# logo = cv2.imread('elonmusk.png') 
+logo = cv2.imread('elonmusk.jpg') 
 
 size = 100
 
@@ -64,9 +64,6 @@ while True:
 			cv2.putText(frame, str(i+1), (x-10, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)  # Add text
 			# convert dlib's rectangle to a OpenCV-style bounding box
 			# [i.e., (x, y, w, h)], then draw the face bounding box
-
-		for i in range(18):
-			cv2.line(frame,shape[i], shape[i+1],(255,0,0),5)
 		(x, y, w, h) = face_utils.rect_to_bb(rect)
 		cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 		# show the face number

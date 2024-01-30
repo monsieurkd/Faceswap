@@ -5,6 +5,7 @@ kaopiz intern
 #done the tutorial
 
 TODO
+#change a picture to plank background
 #học cách sử dụng cam
 #học cách chèn ảnh vào cam
 #học cách điều khiển ảnh di chuyển thời gian thực theo một thông số nào đó(điểm ảnh ?)
