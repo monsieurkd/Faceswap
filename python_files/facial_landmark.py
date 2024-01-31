@@ -4,6 +4,24 @@ import argparse
 import imutils
 import dlib
 import cv2 
+import math
+
+def calculate_angle(x1, y1, x2, y2):
+    # Calculate the differences in coordinates
+    dx = x2 - x1
+    dy = y2 - y1
+    
+    # Calculate the angle using arctangent (in radians)
+    angle_rad = math.atan2(dy, dx)
+    
+    # Convert radians to degrees
+    angle_deg = math.degrees(angle_rad)
+    
+    # Ensure angle is within [0, 360) range
+    if angle_deg < 0:
+        angle_deg += 360
+    
+    return angle_deg
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--shape-predictor", required=True,
@@ -29,7 +47,7 @@ predictor = dlib.shape_predictor(args["shape_predictor"])
 cap = cv2.VideoCapture(0)
 
 # Read logo and resize 
-logo = cv2.imread('elonmusk.png') 
+logo = cv2.imread('picture/elonmusk.png') 
 # logo = cv2.imread('elonmusk.jpg') 
 
 size = 100
@@ -39,7 +57,7 @@ while True:
 	# Region of Image (ROI), where we want to insert logo 
 
 
-
+	angle = 0
 	# Capture frame-by-frame
 	ret, frame = cap.read()
 	# if frame is read correctly ret is True
@@ -59,6 +77,7 @@ while True:
 		# array
 		shape = predictor(gray, rect)
 		shape = face_utils.shape_to_np(shape)
+		angle = calculate_angle(shape[0][0], shape[0][1], shape[16][0], shape[16][1])
 		for i, (x, y) in enumerate(shape):
 			# cv2.circle(image, (x, y), 5, (0, 255, 0), -1)  # Draw a circle at the point
 			cv2.putText(frame, str(i+1), (x-10, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)  # Add text
@@ -100,7 +119,7 @@ while True:
 			roi += logo 
 		except IndexError:
 			pass
-
+		logo = imutils.rotate(logo, angle)
 
 	cv2.imshow('frame', frame)
 	if cv2.waitKey(1) == ord('q'):

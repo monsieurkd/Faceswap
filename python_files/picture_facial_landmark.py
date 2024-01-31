@@ -4,6 +4,25 @@ import argparse
 import imutils
 import dlib
 import cv2 
+import math
+
+def calculate_angle(x1, y1, x2, y2):
+    # Calculate the differences in coordinates
+    dx = x2 - x1
+    dy = y2 - y1
+    
+    # Calculate the angle using arctangent (in radians)
+    angle_rad = math.atan2(dy, dx)
+    
+    # Convert radians to degrees
+    angle_deg = math.degrees(angle_rad)
+    
+    # Ensure angle is within [0, 360) range
+    if angle_deg < 0:
+        angle_deg += 360
+    
+    return angle_deg
+
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--shape-predictor", required=True,
@@ -28,9 +47,10 @@ predictor = dlib.shape_predictor(args["shape_predictor"])
 
 
 # Read logo and resize 
-# logo = cv2.imread('elonmusk.png') 
-frame = cv2.imread('elonmusk.jpg') 
-
+frame = cv2.imread('picture/face.jpg') 
+# frame = cv2.imread('elonmusk.jpg')
+h, w, _ = frame.shape
+frame = cv2.resize(frame, (w*2,h*2))
 size = 100
 
 
@@ -44,9 +64,16 @@ for (i, rect) in enumerate(rects):
 	# array
 	shape = predictor(gray, rect)
 	shape = face_utils.shape_to_np(shape)
+	print(shape[0])
+	print(shape[16])
+	print('')
+
 	for i, (x, y) in enumerate(shape):
+		if i ==0 or i == 16:
+			cv2.putText(frame, str(i+1), (x-10, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)  # Add text
+		else:	
 		# cv2.circle(image, (x, y), 5, (0, 255, 0), -1)  # Draw a circle at the point
-		cv2.putText(frame, str(i+1), (x-10, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)  # Add text
+			cv2.putText(frame, str(i+1), (x-10, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)  # Add text
 		# convert dlib's rectangle to a OpenCV-style bounding box
 		# [i.e., (x, y, w, h)], then draw the face bounding box
 	(x, y, w, h) = face_utils.rect_to_bb(rect)
@@ -62,7 +89,7 @@ for (i, rect) in enumerate(rects):
 	
 	frame = cv2.resize(frame, (w, h)) 
 
-
+frame = imutils.rotate(frame, 0.9877)
 
 cv2.imshow('frame', frame)
 

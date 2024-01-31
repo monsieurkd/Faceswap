@@ -29,8 +29,10 @@ predictor = dlib.shape_predictor(args["shape_predictor"])
 cap = cv2.VideoCapture(0)
 
 # Read logo and resize 
-# logo = cv2.imread('elonmusk.png') 
-logo = cv2.imread('elonmusk.jpg') 
+logo = cv2.imread('elonmusk.png') 
+# logo = cv2.imread('elonmusk.jp.png') 
+# logo = cv2.imread('Remove-bg-elon.png') 
+
 
 size = 100
 
